@@ -1,6 +1,6 @@
 
 from argparse import ArgumentParser
-from .args_oap import run_stage_one
+from .stage_one import run_stage_one
 from .stage_two import run_stage_two
 from .make_db import run_make_db
 from . import __version__
@@ -68,15 +68,29 @@ def parse_options():
 
 def call_stage_one(args,logger):
     parser = parse_options()
-    parser = parser.parse_args(args)
     parser.logger = logger
-    print(vars(parser))
+    parser, unknown = parser.parse_known_args(args)
+    parser.logger = logger
+    print(parser.__dict__)
+    if unknown:
+        raise ValueError("There exists unknown parameter(s): "+ str(unknown))
     run_stage_one(parser)
 
 
 def call_stage_two(args,logger):
     parser = parse_options()
-    parser = parser.parse_args(args)
+    parser, unknown = parser.parse_known_args(args)
     parser.logger = logger
-    print(vars(parser))
+    print(parser.__dict__)
+    if unknown:
+        raise ValueError("There exists unknown parameter(s): "+ str(unknown))
     run_stage_two(parser)
+
+def call_make_db(args,logger):
+    parser = parse_options()
+    parser, unknown = parser.parse_known_args(args)
+    parser.logger = logger
+    print(parser.__dict__)
+    if unknown:
+        raise ValueError("There exists unknown parameter(s): "+ str(unknown))
+    run_make_db(parser)

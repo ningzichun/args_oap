@@ -56,6 +56,12 @@ class StageOne:
             self._dbtype = 'prot'
         elif os.path.isfile(self._db + '.ndb'):
             self._dbtype = 'nucl'
+        elif self._db[-4:]=='.pdb' and os.path.isfile(self._db):
+            self._db = self._db[:-4]
+            self._dbtype = 'prot'
+        elif self._db[-4:]=='.ndb' and os.path.isfile(self._db):
+            self._db = self._db[:-4]
+            self._dbtype = 'nucl'
         else:
             self.logger.critical('Cannot find database <{}>. Please run <make_db> first or check database (--database)'.format(self._db))
             raise RuntimeError()
